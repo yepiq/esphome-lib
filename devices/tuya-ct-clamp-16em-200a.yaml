@@ -252,24 +252,13 @@ script:
             id(dp114_request_in_progress) = -1;
           }
 
-# Workaround for observed Tuya UART CRC failures; their cause is unconfirmed.
-# Remove the daily reboot once long-running communication is verified without it.
-time:
-  - id: !extend ha_time
-    on_time:
-      - seconds: 0
-        minutes: 30
-        hours: 3
-        then:
-          - logger.log: Scheduled daily reboot triggered
-          - button.press: mcu_restart
-
 uart:
   id: tuya_uart
   rx_pin: P10
   tx_pin: P11
   baud_rate: 115200
-  rx_buffer_size: 1024
+  # LibreTiny's compile-time ring remains 256 bytes while monitoring overflow.
+  rx_buffer_size: 256
 
 tuya:
   id: my_meter
@@ -686,6 +675,12 @@ button:
           command: 1
 
 sensor:
+  # Temporary diagnostic: one event per incoming byte discarded by a full ring.
+  - platform: bk72xx_uart_guard
+    name: UART RX Overflows
+    id: tuya_uart_rx_overflows
+    uart_id: tuya_uart
+
   # Phase A
   - platform: template
     name: ${phA_name} Voltage

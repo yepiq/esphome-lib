@@ -162,7 +162,18 @@ def check_ct16(config, substitutions):
         assert detected["device_class"] == "plug" and solar["icon"] == "mdi:solar-power"
     assert len([s for s in config["sensor"] if s.get("sensor_datapoint", 0) in range(115, 131)]) == 16
     uart = entity(config, "uart", "tuya_uart")
-    assert uart["baud_rate"] == 115200 and uart["rx_buffer_size"] == 1024
+    assert uart["baud_rate"] == 115200 and uart["rx_buffer_size"] == 256
+    assert "bk72xx_uart_guard" in config
+    assert "LT_SERIAL_BUFFER_SIZE" not in config["bk72xx"]["framework"]["options"]
+    overflow = entity(config, "sensor", "tuya_uart_rx_overflows")
+    assert overflow["platform"] == "bk72xx_uart_guard"
+    assert overflow["name"] == "UART RX Overflows"
+    assert str(overflow["uart_id"]) == "tuya_uart"
+    assert overflow["state_class"] == "total_increasing"
+    assert overflow["entity_category"] == "diagnostic"
+    assert not overflow["disabled_by_default"]
+    assert overflow["unit_of_measurement"] == "events"
+    assert not any(item.get("on_time") for item in config.get("time", []))
 
 
 def check_fan_power(config, fan_id, power_id, condition):

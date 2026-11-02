@@ -158,6 +158,18 @@ The existing BLE host suite tests the checked-out implementation with ASan/UBSan
 python components/bk72xx_ble_server/tests/test_recovery.py
 ```
 
+The Beken UART guard has a focused host suite for interrupt exclusion, both serial ports,
+overflow detection, persistent totals and source filtering when no UART is configured:
+
+```sh
+python components/bk72xx_uart_guard/tests/test_uart_guard.py
+```
+
+Guard changes also require BK7231N and BK7238 firmware builds, plus inspection of the actual
+Serial vtable and ARM mask/restore instructions. Build a UART-free Beken target to verify that
+the guard sources and wrapper flag are absent. The CT16 config cases include a dashboard-style
+consumer and retain the actual 256-byte buffer while monitoring overflow.
+
 It requires `clang++` (or `CXX` pointing to a compatible compiler), and builds only a small host
 executable, not firmware. CI runs the config matrix, all tracked devices/kickstarts and JSON checks
 on pushes/PRs. The separate BLE host job runs for changes to that component or its tests, or on

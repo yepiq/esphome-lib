@@ -5,3 +5,13 @@ substitutions:
 
 packages:
   - !include base-board-libretiny.yaml
+
+external_components:
+  - source: !include ../../component-source.yaml
+    components: [bk72xx_uart_guard]
+    refresh: 0s
+
+# Remove after ESPHome's LibreTiny includes the interrupt-safe Serial read fix.
+# Tracking: libretiny-eu/libretiny#154 and #432.
+# The component emits no sources or linker flags without a merged uart: bus.
+bk72xx_uart_guard:

@@ -245,10 +245,16 @@ cases:
   - id: ct16-channels
     file: devices/tuya-ct-clamp-16em-200a.yaml
     contract: ct16
+    local_components: [bk72xx_uart_guard, tuya_product]
   - id: ct16-channel-overrides
     file: devices/tuya-ct-clamp-16em-200a.yaml
     substitutions: {c01_name: Laundry, c16_name: Garage, c02_internal: true, c16_internal: true, energy_scale: 0.02}
     contract: ct16
+  - id: ct16-dashboard
+    file: tests/fixtures/ct16-dashboard.yaml
+    substitutions: {c01_name: Main Circuit, c16_internal: true}
+    contract: ct16
+    local_components: [bk72xx_uart_guard, tuya_product]
   - id: ct16-solar-hidden
     file: devices/tuya-ct-clamp-16em-200a.yaml
     substitutions: {sol_internal: true}

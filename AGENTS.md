@@ -667,6 +667,20 @@ mechanism against the relevant source and actual toolchain before recommending o
 Document the upstream issue, any version-specific assumptions, and how to remove the workaround
 after an official fix becomes available.
 
+### Pending: Remove The Beken UART Read Guard
+
+Monitor [LibreTiny issue #154](https://github.com/libretiny-eu/libretiny/issues/154) and
+[PR #432](https://github.com/libretiny-eu/libretiny/pull/432). The shared Beken template loads
+`bk72xx_uart_guard` to protect `SerialClass::read()` with saved/restored IRQ and FIQ masks.
+It is required by the interrupt-unsafe receive ring in LibreTiny 1.13.0. Do not copy the ARMv5
+mask implementation into the Realtek or Lightning templates.
+
+Once ESPHome's selected LibreTiny release includes the upstream fix, verify the actual Serial
+read and interrupt handling in that release, then remove the local read wrapper and linker flag
+from the shared Beken layer. Validate and compile BK7231N and BK7238 consumers and check that
+serial reads remain interrupt-safe. Keep CT16's optional overflow sensor independently until
+the overflow investigation is complete; removing the sensor must not remove a still-needed guard.
+
 ### Pending: Remove The Realtek Reboot Workaround
 
 During ESPHome upgrades, check the LibreTiny version actually selected for RTL8720C builds.

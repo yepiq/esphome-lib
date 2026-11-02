@@ -1,0 +1,6 @@
+substitutions:
+  name: test-ct16-dashboard
+  friendly_name: CT16 Dashboard
+
+packages:
+  - !include ../../devices/tuya-ct-clamp-16em-200a.yaml
