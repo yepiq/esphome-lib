@@ -32,7 +32,7 @@ they require their documented context. Unit tests also check local links and dev
 ## Local Components
 
 Every external-component declaration for this library includes `packages/component-source.yaml`.
-Its normal value is the unpinned `github://ngorchilov/esphome-lib`; remote ESPHome dashboard users
+Its normal value is the unpinned `github://yepiq/esphome-lib`; remote ESPHome dashboard users
 need no override. To use local components when working directly in a checkout:
 
 ```sh

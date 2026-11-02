@@ -27,7 +27,7 @@ substitutions:
   friendly_name: Workshop Relay
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:
@@ -164,7 +164,7 @@ your own firmware. Each example below is an entry in a remote package's `files:`
 
 ```yaml
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:

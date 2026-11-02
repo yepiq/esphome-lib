@@ -77,7 +77,7 @@ The component can also be configured without the shared package:
 
 ```yaml
 external_components:
-  - source: github://ngorchilov/esphome-lib
+  - source: github://yepiq/esphome-lib
     components: [tuya_product]
     refresh: 0s
 

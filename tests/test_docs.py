@@ -41,7 +41,7 @@ class DocumentationTests(unittest.TestCase):
 substitutions:
   name: example
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     files:
       - path: device.yaml

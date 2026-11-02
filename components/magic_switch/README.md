@@ -21,7 +21,7 @@ Unlike a single-threshold detector, it:
 
 ```yaml
 external_components:
-  - source: github://ngorchilov/esphome-lib
+  - source: github://yepiq/esphome-lib
     components: [magic_switch]
 
 magic_switch:

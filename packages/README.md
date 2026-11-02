@@ -27,7 +27,7 @@ substitutions:
       version: 2026.8.0
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:

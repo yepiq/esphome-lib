@@ -1,2 +1,2 @@
 # Set to an absolute components directory for local development; consumers use moving main.
-!env_var ESPHOME_LIB_SOURCE github://ngorchilov/esphome-lib
+!env_var ESPHOME_LIB_SOURCE github://yepiq/esphome-lib

@@ -20,7 +20,7 @@ substitutions:
   friendly_name: Grid Monitor
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:
@@ -71,7 +71,7 @@ substitutions:
   friendly_name: Office Power Strip
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:
@@ -115,7 +115,7 @@ substitutions:
   uart_baud_rate: 9600
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:
@@ -183,7 +183,7 @@ substitutions:
   friendly_name: Dining Switch
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:
@@ -362,7 +362,7 @@ substitutions:
   friendly_name: Ventilation
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:
@@ -417,7 +417,7 @@ substitutions:
   board_profile: heltec
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:

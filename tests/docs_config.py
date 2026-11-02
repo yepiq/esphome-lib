@@ -16,7 +16,7 @@ DOCS = [
     Path("packages/modules/README.md"), Path("packages/modules/networking/README.md"),
     *sorted(path.relative_to(ROOT) for path in (ROOT / "packages/appliances").glob("*/README.md")),
 ]
-URL = "https://github.com/ngorchilov/esphome-lib"
+URL = "https://github.com/yepiq/esphome-lib"
 
 
 def field(node, name):

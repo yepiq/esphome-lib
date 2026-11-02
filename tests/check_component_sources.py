@@ -16,7 +16,7 @@ def main():
     source_file = component_root.parent / "packages/component-source.yaml"
     selected = os.environ.pop("ESPHOME_LIB_SOURCE")
     try:
-        assert load_yaml(source_file) == "github://ngorchilov/esphome-lib"
+        assert load_yaml(source_file) == "github://yepiq/esphome-lib"
     finally:
         os.environ["ESPHOME_LIB_SOURCE"] = selected
     CORE.config_path = config_path

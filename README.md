@@ -15,7 +15,7 @@ substitutions:
   friendly_name: Laundry Dehumidifier
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:
@@ -43,7 +43,7 @@ substitutions:
   friendly_name: Room Light
 
 packages:
-  - url: https://github.com/ngorchilov/esphome-lib
+  - url: https://github.com/yepiq/esphome-lib
     ref: main
     refresh: 0d
     files:
