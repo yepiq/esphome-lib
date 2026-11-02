@@ -399,7 +399,11 @@ def check(config, contract, substitutions):
         assert light["constant_brightness"] and light["color_interlock"]
         for role, channel in zip(("red", "green", "blue", "cold_white", "warm_white"), channels):
             assert str(light[role]) == f"out_{channel}"
-        assert not config.get("external_components") if is_cbu else config.get("external_components")
+        has_ln882h_pwm = any(
+            "ln882h_pwm" in source.get("components", [])
+            for source in config.get("external_components", [])
+        )
+        assert has_ln882h_pwm != is_cbu, "Only the WL2H profile should load the external LN882H PWM driver"
         return
     if contract == "version-composition":
         sources = [item["source"] for item in requirements]

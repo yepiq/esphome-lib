@@ -149,7 +149,8 @@ def main():
                         "reason": case.get("reason", "")})
         print(f"{status} {case['id']}" + (f" ({case['reason']})" if case.get("reason") else ""), flush=True)
         if status in ("FAIL", "XPASS"):
-            print(output[-5000:] if "Component provenance:" in output else output[:5000], flush=True)
+            post_config_check = "Component provenance:" in output or "Resolved contract:" in output
+            print(output[-5000:] if post_config_check else output[:5000], flush=True)
     (root / "results.json").write_text(json.dumps(results, indent=2) + "\n")
     print(dict(Counter(result["status"] for result in results)), flush=True)
     return int(any(result["status"] in ("FAIL", "XPASS") for result in results))
