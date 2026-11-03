@@ -566,6 +566,19 @@ def check(config, contract, substitutions):
         assert meter["update_interval"].total_milliseconds == 1000
         assert meter["energy"]["unit_of_measurement"] == "kWh"
         assert config["uart"][0]["baud_rate"] == 4800
+        assert config["bk72xx"]["framework"]["version"] == "1.13.0"
+        assert config["esphome"]["platformio_options"]["custom_versions.beken-bdk"] == "3.0.33"
+        diagnostics = config["bk72xx_wifi_diagnostics"]
+        assert str(diagnostics["id"]) == "earu_wifi_diagnostics"
+        assert diagnostics["update_interval"].total_milliseconds == 10000
+        assert config["wifi"]["power_save_mode"] == "NONE"
+        assert config["wifi"]["reboot_timeout"].total_milliseconds == 0
+        assert config["api"]["reboot_timeout"].total_milliseconds == 0
+        for protocol in ("ipv4", "arp", "eapol"):
+            for destination in ("unicast", "group"):
+                counter = diagnostics[f"{destination}_{protocol}"]
+                assert counter["entity_category"] == "diagnostic"
+                assert counter["state_class"] == "total_increasing"
     elif contract.startswith("wifi-"):
         network = config["wifi"]["networks"][0]
         expected = {

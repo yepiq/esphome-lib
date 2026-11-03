@@ -355,6 +355,7 @@ cases:
   - id: earu-acquisition
     file: devices/earu-breaker.yaml
     contract: earu
+    local_components: [bk72xx_uart_guard, bk72xx_wifi_diagnostics]
   - id: inherited-logger
     file: devices/pro-breeze-dehumidifier.yaml
     substitutions: {log_level: WARN}

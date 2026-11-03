@@ -52,7 +52,51 @@ substitutions:
 packages:
   - !include ../packages/boards/tuya/cbu.yaml
 
+# Temporary diagnostics for selective unicast loss; remove after the investigation.
+# Keep the current framework/SDK during collection so upgrades do not confound it.
+bk72xx:
+  framework:
+    version: 1.13.0
+
+external_components:
+  - source: !include ../packages/component-source.yaml
+    components: [bk72xx_wifi_diagnostics]
+    refresh: 0s
+
+bk72xx_wifi_diagnostics:
+  id: earu_wifi_diagnostics
+  unicast_ipv4:
+    name: WiFi RX Unicast IPv4
+  group_ipv4:
+    name: WiFi RX Group IPv4
+  unicast_arp:
+    name: WiFi RX Unicast ARP
+  group_arp:
+    name: WiFi RX Group ARP
+  unicast_eapol:
+    name: WiFi RX Unicast EAPOL
+  group_eapol:
+    name: WiFi RX Group EAPOL
+  event_history:
+    name: WiFi Event History
+  rx_snapshot:
+    name: WiFi RX Snapshot
+
+button:
+  - platform: template
+    name: WiFi Diagnostic Snapshot
+    entity_category: diagnostic
+    on_press:
+      - lambda: id(earu_wifi_diagnostics).snapshot();
+  - platform: template
+    name: WiFi Restart
+    entity_category: config
+    on_press:
+      - lambda: id(earu_wifi_diagnostics).restart_wifi();
+
 esphome:
+  platformio_options:
+    custom_versions.beken-bdk: 3.0.33
   on_boot:
     - priority: 250
       then:
