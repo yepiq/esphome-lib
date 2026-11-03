@@ -165,14 +165,8 @@ def check_ct16(config, substitutions):
     assert uart["baud_rate"] == 115200 and uart["rx_buffer_size"] == 256
     assert "bk72xx_uart_guard" in config
     assert "LT_SERIAL_BUFFER_SIZE" not in config["bk72xx"]["framework"]["options"]
-    overflow = entity(config, "sensor", "tuya_uart_rx_overflows")
-    assert overflow["platform"] == "bk72xx_uart_guard"
-    assert overflow["name"] == "UART RX Overflows"
-    assert str(overflow["uart_id"]) == "tuya_uart"
-    assert overflow["state_class"] == "total_increasing"
-    assert overflow["entity_category"] == "diagnostic"
-    assert not overflow["disabled_by_default"]
-    assert overflow["unit_of_measurement"] == "events"
+    assert "tuya_uart_rx_overflows" not in ids(config, "sensor")
+    assert not any(item["platform"] == "bk72xx_uart_guard" for item in config["sensor"])
     assert not any(item.get("on_time") for item in config.get("time", []))
 
 

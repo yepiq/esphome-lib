@@ -14,8 +14,6 @@ FILTER_SOURCE_FILES = filter_source_files_from_defines(
     {
         "bk72xx_uart_guard.cpp": "USE_BK72XX_UART_GUARD",
         "bk72xx_uart_guard.h": "USE_BK72XX_UART_GUARD",
-        "uart_overflow_sensor.cpp": "USE_BK72XX_UART_OVERFLOW_SENSOR",
-        "uart_overflow_sensor.h": "USE_BK72XX_UART_OVERFLOW_SENSOR",
     }
 )
 

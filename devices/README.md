@@ -269,13 +269,10 @@ Fixed wiring and further electrical overrides are listed in each device's openin
 EARU reports native kWh. Older firmware labeled the same numbers Wh; review existing HA energy
 statistics before migrating an older installation. Faster acquisition does not imply faster HA
 reporting, and software temperature protection is not a substitute for hardware protection.
-CT16 inherits the shared Beken UART read guard and has no scheduled reboot. Its temporary
-`UART RX Overflows` diagnostic counts incoming bytes discarded by a full software receive ring.
-The total uses normal ESPHome preferences, surviving ordinary reboots and OTA reflashes;
-recent unsaved events may be lost on abrupt power loss, and erasing preferences resets it.
-The actual buffer remains 256 bytes while measuring overflow. See the
-[UART guard component](../components/bk72xx_uart_guard/README.md) for the upstream removal condition
-and the distinction between software-buffer drops and hardware UART errors.
+CT16 inherits the shared Beken UART read guard and has no scheduled reboot. The receive buffer
+retains LibreTiny's default capacity of 256 bytes. See the
+[UART guard component](../components/bk72xx_uart_guard/README.md) for its scope and upstream
+removal condition.
 
 ## ESP-07 Serial Bridge
 

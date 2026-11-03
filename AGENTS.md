@@ -678,8 +678,7 @@ mask implementation into the Realtek or Lightning templates.
 Once ESPHome's selected LibreTiny release includes the upstream fix, verify the actual Serial
 read and interrupt handling in that release, then remove the local read wrapper and linker flag
 from the shared Beken layer. Validate and compile BK7231N and BK7238 consumers and check that
-serial reads remain interrupt-safe. Keep CT16's optional overflow sensor independently until
-the overflow investigation is complete; removing the sensor must not remove a still-needed guard.
+serial reads remain interrupt-safe.
 
 ### Pending: Remove The Realtek Reboot Workaround
 

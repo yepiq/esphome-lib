@@ -257,7 +257,7 @@ uart:
   rx_pin: P10
   tx_pin: P11
   baud_rate: 115200
-  # LibreTiny's compile-time ring remains 256 bytes while monitoring overflow.
+  # LibreTiny uses a 256-byte compile-time receive ring.
   rx_buffer_size: 256
 
 tuya:
@@ -675,12 +675,6 @@ button:
           command: 1
 
 sensor:
-  # Temporary diagnostic: one event per incoming byte discarded by a full ring.
-  - platform: bk72xx_uart_guard
-    name: UART RX Overflows
-    id: tuya_uart_rx_overflows
-    uart_id: tuya_uart
-
   # Phase A
   - platform: template
     name: ${phA_name} Voltage
