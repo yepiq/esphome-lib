@@ -1,0 +1,44 @@
+"""Select a raw CBC backend before LibreTiny packages Beken OTA images."""
+
+import subprocess
+
+Import("env")
+
+# Relink when the hook changes so ltchiptool also regenerates its cached RBL images.
+env.Depends(
+    "$BUILD_DIR/${PROGNAME}${PROGSUFFIX}", "$PROJECT_DIR/bk72xx_ota_packaging.py"
+)
+
+# ltchiptool 4.15.0 pads the OTA payload itself, but its PyAES backend pads again.
+# Remove this workaround once upstream's PyAES wrapper uses raw CBC semantics.
+# https://github.com/libretiny-eu/ltchiptool/blob/master/ltchiptool/util/crypto.py
+# LibreTiny 1.13.0 creates LTPYTHONEXE before PlatformIO's post scripts run.
+env.InstallPythonDependencies({"pycryptodome": ">=3.18,<4"})
+
+# Fail the build if dependency installation failed or backend selection regressed.
+# NIST SP 800-38A F.2.5, first AES-256-CBC block, with no padding.
+subprocess.run(
+    [
+        env.subst("${LTPYTHONEXE}"),
+        "-c",
+        """
+from importlib.metadata import version
+
+from ltchiptool.util.crypto import make_aes_crypto
+
+key = bytes.fromhex('603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4')
+iv = bytes.fromhex('000102030405060708090a0b0c0d0e0f')
+plain = bytes.fromhex('6bc1bee22e409f96e93d7e117393172a')
+cipher = bytes.fromhex('f58c4c04d6e5f1ba779eabfb5f7bfbd6')
+if make_aes_crypto(key, iv).encrypt(plain) != cipher:
+    raise RuntimeError('Beken OTA AES padding mismatch')
+if make_aes_crypto(key, iv).decrypt(cipher) != plain:
+    raise RuntimeError('Beken OTA AES decryption mismatch')
+print(
+    'Beken OTA packaging: raw AES-CBC verified '
+    f'(ltchiptool {version("ltchiptool")}, PyCryptodome {version("pycryptodome")})'
+)
+""",
+    ],
+    check=True,
+)

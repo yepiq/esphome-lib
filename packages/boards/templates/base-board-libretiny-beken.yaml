@@ -8,8 +8,11 @@ packages:
 
 external_components:
   - source: !include ../../component-source.yaml
-    components: [bk72xx_uart_guard]
+    components: [bk72xx_uart_guard, bk72xx_ota_packaging]
     refresh: 0s
+
+# Keep ltchiptool's AES padding consistent on ARM and desktop build hosts.
+bk72xx_ota_packaging:
 
 # Remove after ESPHome's LibreTiny includes the interrupt-safe Serial read fix.
 # Tracking: libretiny-eu/libretiny#154 and #432.

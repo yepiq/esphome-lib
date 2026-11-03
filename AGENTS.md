@@ -680,6 +680,15 @@ read and interrupt handling in that release, then remove the local read wrapper 
 from the shared Beken layer. Validate and compile BK7231N and BK7238 consumers and check that
 serial reads remain interrupt-safe.
 
+### Pending: Remove The Beken OTA Packaging Workaround
+
+The shared Beken template loads `bk72xx_ota_packaging` to select PyCryptodome in LibreTiny's
+build environment. ltchiptool 4.15.0's PyAES backend adds a second AES padding layer, which
+can trigger a BK7231N bootloader verification defect at a 4096-byte compressed-input boundary.
+Track the [upstream AES wrapper](https://github.com/libretiny-eu/ltchiptool/blob/master/ltchiptool/util/crypto.py).
+Once the supported release fixes backend padding consistency, verify an ARM-host Beken build
+and remove the component and base-board declaration. See the component README for history.
+
 ### Pending: Remove The Realtek Reboot Workaround
 
 During ESPHome upgrades, check the LibreTiny version actually selected for RTL8720C builds.
