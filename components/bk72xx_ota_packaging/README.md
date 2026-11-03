@@ -39,8 +39,11 @@ Check for the successful AES message above before uploading the newly generated 
 After reboot, confirm the device reports the new compilation timestamp. Previously generated
 firmware artifacts need regeneration before uploading.
 
-Monitor the upstream AES wrapper and remove this component, its base-board declaration
-and this note when the supported ltchiptool release consistently uses raw CBC for every
-backend. Verify both PyAES and PyCryptodome against the same aligned input and check a
-Beken OTA package from an ARM build host before removing it.
-[Upstream wrapper](https://github.com/libretiny-eu/ltchiptool/blob/master/ltchiptool/util/crypto.py)
+Track [ltchiptool PR #104](https://github.com/libretiny-eu/ltchiptool/pull/104) through merge
+and the first [ltchiptool release](https://github.com/libretiny-eu/ltchiptool/releases) containing
+the fix. Before removing this workaround, confirm the supported LibreTiny toolchain requires
+that fixed version or newer and check the version actually installed in its Python environment.
+Verify PyAES and PyCryptodome against the same aligned input, then validate the 4096-byte OTA
+boundary in a clean ARM build environment. After those checks, remove this component, both
+registrations in the shared Beken template, its provenance checks in `tests/cases.yaml`, and
+the pending-removal note in `AGENTS.md`.

@@ -685,9 +685,12 @@ serial reads remain interrupt-safe.
 The shared Beken template loads `bk72xx_ota_packaging` to select PyCryptodome in LibreTiny's
 build environment. ltchiptool 4.15.0's PyAES backend adds a second AES padding layer, which
 can trigger a BK7231N bootloader verification defect at a 4096-byte compressed-input boundary.
-Track the [upstream AES wrapper](https://github.com/libretiny-eu/ltchiptool/blob/master/ltchiptool/util/crypto.py).
-Once the supported release fixes backend padding consistency, verify an ARM-host Beken build
-and remove the component and base-board declaration. See the component README for history.
+Track [ltchiptool PR #104](https://github.com/libretiny-eu/ltchiptool/pull/104) through merge
+and the first [ltchiptool release](https://github.com/libretiny-eu/ltchiptool/releases) containing
+the fix. Before removal, confirm the supported LibreTiny toolchain requires a fixed ltchiptool
+version and check the version actually installed in its Python environment. Verify PyAES directly
+and validate the 4096-byte OTA boundary in a clean ARM-host Beken build. Then remove the component,
+its base-board registrations, validation references and this pending note. See the component README.
 
 ### Pending: Remove The Realtek Reboot Workaround
 

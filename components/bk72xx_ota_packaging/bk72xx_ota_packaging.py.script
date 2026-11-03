@@ -10,8 +10,8 @@ env.Depends(
 )
 
 # ltchiptool 4.15.0 pads the OTA payload itself, but its PyAES backend pads again.
-# Remove this workaround once upstream's PyAES wrapper uses raw CBC semantics.
-# https://github.com/libretiny-eu/ltchiptool/blob/master/ltchiptool/util/crypto.py
+# Track merge and release of https://github.com/libretiny-eu/ltchiptool/pull/104.
+# Remove once the supported toolchain requires the fixed release; see README.md.
 # LibreTiny 1.13.0 creates LTPYTHONEXE before PlatformIO's post scripts run.
 env.InstallPythonDependencies({"pycryptodome": ">=3.18,<4"})
 

@@ -12,6 +12,7 @@ external_components:
     refresh: 0s
 
 # Keep ltchiptool's AES padding consistent on ARM and desktop build hosts.
+# Track ltchiptool PR #104 through merge and release; removal criteria are in AGENTS.md.
 bk72xx_ota_packaging:
 
 # Remove after ESPHome's LibreTiny includes the interrupt-safe Serial read fix.
