@@ -4,7 +4,7 @@
 
 Original esphome-lib code and documentation are offered under the [MIT License](LICENSE), except
 for the file identified below. This includes commercial reuse. The grant applies to rights held
-by the contributors, where copyright applies; it does not claim ownership of third-party work
+by the copyright holder, where copyright applies; it does not claim ownership of third-party work
 or guarantee that every AI-assisted fragment is independently copyrightable.
 
 Third-party notices and licenses take precedence for their respective material. External
