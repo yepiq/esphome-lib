@@ -58,6 +58,8 @@ def main():
             assert config is not None
             fan = next(f for f in config["fan"] if str(f["id"]) == f"{prefix}_fan")
             source = source.replace(f"{prefix.upper()}_COMMAND_BODY", actions(fan["on_state"][0]["then"]))
+            if prefix == "pb":
+                source = source.replace("PB_CONTROL_BODY", actions(fan["on_control"][0]["then"]))
             for dp in datapoints:
                 callback = next(c for c in config["tuya"]["on_datapoint_update"] if c["sensor_datapoint"] == dp)
                 source = source.replace(f"{prefix.upper()}_DP{dp}_BODY", actions(callback["then"]))

@@ -190,9 +190,11 @@ def check_dehumidifier(config):
     fan = entity(config, "fan", f"{prefix}_fan")
     assert fan["name"] == "" and not fan.get("internal", False) and fan["speed_count"] == 2
     assert fan["has_oscillating"] == (not jummico)
-    assert fan["restore_mode"] == "RESTORE_DEFAULT_OFF"
+    assert fan["restore_mode"] == ("RESTORE_DEFAULT_OFF" if jummico else "NO_RESTORE")
+    if not jummico:
+        assert fan["platform"] == "command_fan" and fan["on_control"]
     running = check_fan_power(config, f"{prefix}_fan", f"{prefix}_power_dp",
-                              "return !id(jummico_syncing_fan);" if jummico else "return true;")
+                              "return !id(jummico_syncing_fan);" if jummico else "return !id(pb_syncing_fan);")
     assert len(running) == 1 and "const int want_speed" in running[0]["lambda"].value
     callbacks = {dp["sensor_datapoint"]: dp for dp in config["tuya"]["on_datapoint_update"]}
     assert callbacks.keys() == ({1, 4, 19} if jummico else {1, 6, 8, 11})

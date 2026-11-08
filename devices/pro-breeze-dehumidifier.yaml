@@ -15,8 +15,13 @@ packages:
         power_id: pb_power_dp
         speed_count: 2
         has_oscillating: true
+        restore_mode: NO_RESTORE
+        command_condition:
+          lambda: return !id(pb_syncing_fan);
         on_running:
           - lambda: |-
+              // The MCU must finish power-on before accepting speed commands.
+              if (id(pb_mcu_power_state) != 1) return;
               const bool want_osc = x->oscillating;
               const int want_speed = (int) x->speed;
 
@@ -35,15 +40,35 @@ packages:
 
                 if (cur_dp6 != dp6) {
                   ESP_LOGD("pb", "fan.on_state: applying speed=%d -> DP6=%d (cur=%d)", want_speed, dp6, cur_dp6);
-                  auto c = id(pb_fan_speed_dp).make_call();
-                  c.set_value((float) dp6);
-                  c.perform();
+                  // Power-on resets speed without immediately reporting DP6.
+                  // Tuya's cached DP6 may still contain the pre-power-off value.
+                  id(pb_tuya).force_set_enum_datapoint_value(6, dp6);
+                  id(pb_fan_speed_dp).publish_state((float) dp6);
                 } else {
                   ESP_LOGD("pb", "fan.on_state: speed already applied (DP6=%d)", cur_dp6);
                 }
               } else {
                 ESP_LOGD("pb", "fan.on_state: speed not provided (x->speed=%d) -> leaving DP6 unchanged", want_speed);
               }
+
+external_components:
+  - source: !include ../packages/component-source.yaml
+    components: [command_fan]
+    refresh: 0s
+
+fan:
+  - id: !extend pb_fan
+    platform: command_fan
+    on_control:
+      - lambda: |-
+          if (id(pb_syncing_fan)) return;
+          const bool want_on = x.get_state().value_or(id(pb_fan).state);
+          if (!want_on) {
+            id(pb_startup_speed) = 0;
+          } else if (id(pb_mcu_power_state) != 1) {
+            // Plain On has no speed; a speed selection is explicit user intent.
+            id(pb_startup_speed) = x.get_speed().value_or(0);
+          }
 
 esphome:
   project:
@@ -63,6 +88,21 @@ esphome:
                 value: !lambda 'return (float) id(pb_target_humidity_saved);'
 
 globals:
+  - id: pb_startup_speed
+    type: int
+    restore_value: false
+    initial_value: '0'
+
+  - id: pb_mcu_power_state
+    type: int
+    restore_value: false
+    initial_value: '-1'
+
+  - id: pb_syncing_fan
+    type: bool
+    restore_value: false
+    initial_value: 'false'
+
   - id: pb_target_humidity_saved
     type: int
     restore_value: yes
@@ -83,13 +123,27 @@ tuya:
       then:
         - lambda: |-
             ESP_LOGD("pb", "DP1 (Power State) on_datapoint_update: %s", x ? "ON" : "OFF");
+            const bool powering_on = x && id(pb_mcu_power_state) == 0;
+            id(pb_mcu_power_state) = x ? 1 : 0;
+            id(pb_syncing_fan) = true;
             auto call = id(pb_fan).make_call();
             call.set_state(x);
-            if (x) {
-              // Unit boots in LOW after power-on; reflect that in HA.
+            if (powering_on) {
+              // Only a real off-to-on transition boots in Low, not every ON report.
+              ESP_LOGD("pb", "Power-on transition: reflecting MCU startup speed Low");
+              id(pb_fan_speed_dp).publish_state(1);
               call.set_speed(1);
             }
             call.perform();
+            id(pb_syncing_fan) = false;
+            if (x && id(pb_startup_speed) > 0) {
+              const int requested_speed = id(pb_startup_speed);
+              id(pb_startup_speed) = 0;
+              ESP_LOGD("pb", "Power acknowledged: applying requested startup speed %d", requested_speed);
+              auto requested = id(pb_fan).make_call();
+              requested.set_speed(requested_speed);
+              requested.perform();
+            }
 
     - sensor_datapoint: 6
       datapoint_type: enum
@@ -99,18 +153,22 @@ tuya:
             // DP6: 0=High, 1=Low
             const int speed = (x == 1) ? 1 : 2;  // 1=LOW, 2=HIGH
 
+            id(pb_syncing_fan) = true;
             auto call = id(pb_fan).make_call();
             call.set_speed(speed);
             call.perform();
+            id(pb_syncing_fan) = false;
 
     - sensor_datapoint: 8
       datapoint_type: bool
       then:
         - lambda: |-
             ESP_LOGD("pb", "DP8 (Swing) on_datapoint_update: %s", x ? "ON" : "OFF");
+            id(pb_syncing_fan) = true;
             auto call = id(pb_fan).make_call();
             call.set_oscillating(x);
             call.perform();
+            id(pb_syncing_fan) = false;
 
     - sensor_datapoint: 11
       datapoint_type: bitmask
