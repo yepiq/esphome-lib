@@ -26,7 +26,8 @@ Monitor [LibreTiny issue #154](https://github.com/libretiny-eu/libretiny/issues/
 [PR #432](https://github.com/libretiny-eu/libretiny/pull/432). Once the LibreTiny release selected
 by ESPHome contains the fix, verify its interrupt-safe Serial implementation and remove the local
 read wrapper and `--wrap=_ZN11SerialClass4readEv` flag. Revalidate and compile BK7231N and BK7238
-consumers, checking their generated calls. See the matching pending-removal note in `AGENTS.md`.
+consumers, checking their generated calls. See the matching
+[pending-removal instructions](../../docs/agents/dependencies.md#pending-remove-the-beken-uart-read-guard).
 
 ## Validation
 

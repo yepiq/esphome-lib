@@ -46,4 +46,4 @@ that fixed version or newer and check the version actually installed in its Pyth
 Verify PyAES and PyCryptodome against the same aligned input, then validate the 4096-byte OTA
 boundary in a clean ARM build environment. After those checks, remove this component, both
 registrations in the shared Beken template, its provenance checks in `tests/cases.yaml`, and
-the pending-removal note in `AGENTS.md`.
+the [pending-removal instructions](../../docs/agents/dependencies.md#pending-remove-the-beken-ota-packaging-workaround).
